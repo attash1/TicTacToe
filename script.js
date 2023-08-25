@@ -49,7 +49,8 @@ const gameBoard = (() => {
 const displayController = (() => {
     const boxes = document.querySelectorAll('.box');
     const resultBox = document.getElementById('resultBox');
-
+    resultBox.textContent = `X's Turn`;
+    
     boxes.forEach(box => box.addEventListener('click', boxClickHandler));
 
     function boxClickHandler(e) {
@@ -72,6 +73,10 @@ const displayController = (() => {
         }
     }
 
+    const editText = (text) => {
+        resultBox.textContent = text;
+    }
+
 
     const resetButton = document.querySelector('.reset');
     resetButton.addEventListener('click', () => {
@@ -80,7 +85,10 @@ const displayController = (() => {
         boxes.forEach(box => box.textContent = "");
         gameBoard.clearBoard();
         gameController.reset();
+        resultBox.textContent = `X's Turn`;
     })
+
+    return {editText};
 })();
 
 
@@ -109,6 +117,7 @@ const gameController = (() => {
         player1Turn = !player1Turn;
         player2Turn = !player2Turn;
         roundNum++;
+        displayController.editText(`${getCurrentPlayerSign()}'s Turn`)
     }
 
     return {advanceRound, getCurrentPlayerSign, getRoundNum, reset}
@@ -127,24 +136,3 @@ function startGame() {
     gameScreen.style.display = 'flex';
 }
 
-/*
-    Play Game Function
-
-    LESS GLOBAL CODE, LOOK AT MODULE PATTERN IN
-    THE ODIN PROJECT PAGE, MAYBE USE THAT FOR 
-    THE GAMEBOARD
-
-
-    Keep conditionals for if player 1 or player 2 turn,
-    swap them when each player makes a move. Do corresponding 
-    responses for each player's move
-
-
-    Have player 1 pick a spot
-    Check if p1 won, If winning configuration, end game, p1 wins
-
-    Have player 2 pick a spot
-    Check if p2 won, eojIf winning configuration, end game, p2 wins
-
-
-*/

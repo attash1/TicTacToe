@@ -1,6 +1,21 @@
+* {
+    font-family: 'Lato', sans-serif;
+}
+
 body, html {
     width: 100%;
     height: 100%;
+}
+
+#title {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 500px;
+    margin: auto auto;
+    font-size: 40px;
+    
 }
 
 #gameBoard {
@@ -16,14 +31,31 @@ body, html {
 #gamePage {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 500px;
-    margin: 0 auto;
+    margin: 100px auto 0 auto;
+    
+ 
 }
 
+#resultBox {
+    padding-top: 15px;
+}
 .box {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
+    font-size: 40px;
 }
 
+button {
+    padding: 5px;
+    margin-top: 50px;
+    border: none;
+    transition: all 0.3s;
+    border-radius: 5px;
+}
+button:active {
+    box-shadow: 0px 2px 5px inset;
+}
