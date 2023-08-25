@@ -19,39 +19,99 @@ const gameBoard = (() => {
         }
     }
 
-    return {editBoard, clearBoard};
+    const isGameOver = () => {
+        let roundNum = gameController.getRoundNum();
+        if (roundNum >= 5) {
+            if (roundNum == 9) {
+                return true;
+            }
+
+            if ((board[0] != "" && board[0] === board[1] && board[1] === board[2]) || 
+                (board[3] != "" && board[3] === board[4] && board[4] === board[5]) ||
+                (board[6] != "" && board[6] === board[7] && board[7] === board[8]) ||
+                (board[0] != "" && board[0] === board[3] && board[3] === board[6]) ||
+                (board[1] != "" && board[1] === board[4] && board[4] === board[7]) ||
+                (board[2] != "" && board[2] === board[5] && board[5] === board[8]) || 
+                (board[0] != "" && board[0] === board[4] && board[4] === board[8]) || 
+                (board[6] != "" && board[6] === board[4] && board[4] === board[2])  ) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+
+    return {editBoard, clearBoard, isGameOver};
 })();
 
 const displayController = (() => {
     const boxes = document.querySelectorAll('.box');
-    boxes.forEach(box => box.addEventListener('click', (e) => {
-        //add conditional for if game not finished
+    const resultBox = document.getElementById('resultBox');
+
+    boxes.forEach(box => box.addEventListener('click', boxClickHandler));
+
+    function boxClickHandler(e) {
         let curSign = gameController.getCurrentPlayerSign();
         gameBoard.editBoard(parseInt(e.target.id), curSign);
         e.target.textContent = curSign;
-        gameController.advanceRound();
-    }))
+       
+        if (!gameBoard.isGameOver()) {
+            gameController.advanceRound();
+        }
+
+        else {
+            boxes.forEach(box => box.removeEventListener('click', boxClickHandler));
+
+            if (gameController.getRoundNum() == 9) 
+                resultBox.textContent = `Game Over! Draw!`;
+            else
+                resultBox.textContent = `Game Over! ${gameController.getCurrentPlayerSign()} wins!`;
+            
+        }
+    }
+
+
+    const resetButton = document.querySelector('.reset');
+    resetButton.addEventListener('click', () => {
+        boxes.forEach(box => box.addEventListener('click', boxClickHandler));
+        resultBox.textContent = "";
+        boxes.forEach(box => box.textContent = "");
+        gameBoard.clearBoard();
+        gameController.reset();
+    })
 })();
 
 
 const gameController = (() => {
+    let roundNum = 1;
+
     const player1 = player('X');
     const player2 = player('O');
 
     let player1Turn = true;
     let player2Turn = false;
 
+    const getRoundNum = () => {return roundNum};
+
     const getCurrentPlayerSign = () => {
         return player1Turn ? player1.getSign() : player2.getSign() 
     };
 
-    console.log(`p1 sign is ${getCurrentPlayerSign()}`);
+    const reset = () => {
+        roundNum = 1;
+        player1Turn = true;
+        player2Turn = false;
+    }
+
     const advanceRound = () => {
         player1Turn = !player1Turn;
         player2Turn = !player2Turn;
+        roundNum++;
     }
-    
-    return {advanceRound, getCurrentPlayerSign}
+
+    return {advanceRound, getCurrentPlayerSign, getRoundNum, reset}
 })();
 
 

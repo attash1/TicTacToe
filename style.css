@@ -9,8 +9,21 @@ body, html {
     grid-template-columns: 1fr 1fr 1fr;
     height: 500px;
     width: 500px;
-    border: 2px solid green;
+    gap: 10px;
+    background-color: lightgray;
 }
+
+#gamePage {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 0 auto;
+}
+
 .box {
-    border: 2px solid purple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
 }
+
